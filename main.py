@@ -13,20 +13,31 @@ import os
 from dotenv import load_dotenv
 from google import genai
 
-load_dotenv()  # これで.envファイルの内容を読み込む
-api_key = os.getenv("GEMINI_API_KEY") # 変数に代入
+def get_client():
+    load_dotenv()  # これで.envファイルの内容を読み込む
+    api_key = os.getenv("GEMINI_API_KEY") # 変数に代入
+    return genai.Client(api_key=api_key)
 
-# クライアントの作成
-client = genai.Client(api_key=api_key)
+    # クライアントの作成
+    # client = genai.Client(api_key=api_key)
+    # MODEL_NAME = 'gemini-2.5-flash'
 
-# 接続テスト：簡単な質問を投げる
-print("Geminiに接続中...")
-response = client.models.generate_content(
-    model='gemini-2.5-flash',
-    contents='「接続成功だよ」と短く答えて'
-)
+def test_connection(client):
+    # 接続テスト：簡単な質問を投げる
+    print("Geminiに接続中...")
 
-# 返答を表示
-print("-" * 20)
-print(response.text)
-print("-" * 20)
+    response = client.models.generate_content(
+        model='gemini-2.5-flash',
+        contents='「接続成功だよ」と短く答えて'
+    )
+
+    # 返答を表示
+    print("-" * 20)
+    print(response.text)
+    print("-" * 20)
+
+if __name__ == '__main__':
+    my_client = get_client()
+
+    test_connection(my_client)
+
